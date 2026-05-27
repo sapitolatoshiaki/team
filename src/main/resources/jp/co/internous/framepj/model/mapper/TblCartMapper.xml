@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="jp.co.internous.framepj.model.mapper.TblCartMapper">
+
+	<select id="findByUserId" resultType="jp.co.internous.framepj.model.domain.dto.CartDto">
+		SELECT
+			c.id,
+			c.product_id,
+			p.image_full_path,
+			p.product_name,
+			p.price,
+			c.product_count
+		FROM
+			tbl_cart AS c
+		INNER JOIN
+			mst_product AS p
+			ON c.product_id = p.id
+		WHERE
+			user_id = #{userId}
+		ORDER BY
+			c.updated_at DESC,
+			c.created_at DESC
+	</select>
+	
+	<delete id="deleteById">
+		DELETE
+		FROM
+			tbl_cart
+		WHERE
+			id IN
+			<foreach collection="checkedIds" item="id" open="(" separator="," close=")">
+				#{id}
+			</foreach>
+	</delete>
+	
+</mapper>
